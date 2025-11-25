@@ -1,31 +1,39 @@
-# Use official Python slim image
-FROM python:3.11-slim
+# Use official n8n image as base (Alpine-based)
+FROM n8nio/n8n:latest
 
-WORKDIR /app
+# Switch to root to install packages
+USER root
 
-# Install system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        build-essential \
-        libffi-dev \
-        gcc \
-        g++ \
-        curl \
-    && rm -rf /var/lib/apt/lists/*
+# Install curl (Alpine package manager)
+RUN apk add --no-cache curl bash
 
-RUN pip install --upgrade pip setuptools wheel
+# Set environment variables
+ENV NODE_ENV=production
+ENV N8N_SECURE_COOKIE=false
+ENV NODE_VERSION=22.19.0
+ENV YARN_VERSION=1.22.22
+ENV NODE_ICU_DATA=/usr/local/lib/node_modules/full-icu
+ENV WEBHOOK_URL=https://aimee-unmodest-pseudoartistically.ngrok-free.dev
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Enforce correct permissions on settings file
+ENV N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
 
-COPY . .
+# Set working directory
+WORKDIR /home/node
 
-RUN mkdir -p logs
+# Set labels
+LABEL org.opencontainers.image.description="Workflow Automation Tool"
+LABEL org.opencontainers.image.source="https://github.com/n8n-io/n8n"
+LABEL org.opencontainers.image.title="n8n"
+LABEL org.opencontainers.image.url="https://n8n.io"
+LABEL org.opencontainers.image.version="1.110.1"
 
-EXPOSE 5000
+# Expose n8n port
+EXPOSE 5678
 
-ENV PYTHONUNBUFFERED=1
-ENV PORT=5000
+# Switch back to n8n user
+USER node
 
-# We will use 4 workers total: 3 normal + 1 special "cron" worker
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000", "--workers", "4"]
+# Ensure n8n binary is in PATH
+ENV PATH=/usr/local/bin:$PATH
+

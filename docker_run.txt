@@ -1,0 +1,15 @@
+docker run -d `
+    --hostname=50be76b50ed9 `
+    --mac-address=ce:fb:b3:cb:51:73 `
+    --env NODE_ENV=production `
+    --env N8N_SECURE_COOKIE=false `
+    --env NODE_VERSION=22.19.0 `
+    --env YARN_VERSION=1.22.22 `
+    --env NODE_ICU_DATA=/usr/local/lib/node_modules/full-icu `
+    --env WEBHOOK_URL=https://aimee-unmodest-pseudoartistically.ngrok-free.dev `
+    --volume n8n_data:/home/node/.n8n `
+    --network=bridge `
+    --workdir=/home/node `
+    -p 5678:5678 `
+    --restart=no `
+    n8n-with-curl
