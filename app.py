@@ -97,6 +97,7 @@ DEFAULT_WORKFLOWS = [
     "ig-sidehustle PINTEREST 3",
     "office-hours",
     "__backup",
+    "readiness-probe"
 ]
 
 def pick_tumblr_account(name: str):
@@ -412,4 +413,5 @@ else:
         start_cron_scheduler()
     except Exception as e:
         logger.error("Failed to initialize cron master: %s", e)
+
 
