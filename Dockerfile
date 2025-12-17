@@ -26,7 +26,7 @@ LABEL org.opencontainers.image.description="Workflow Automation Tool"
 LABEL org.opencontainers.image.source="https://github.com/n8n-io/n8n"
 LABEL org.opencontainers.image.title="n8n"
 LABEL org.opencontainers.image.url="https://n8n.io"
-LABEL org.opencontainers.image.version="1.110.1"
+LABEL org.opencontainers.image.version="2.0.2"
 
 # Expose n8n port
 EXPOSE 5678
