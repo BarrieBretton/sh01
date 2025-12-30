@@ -1,5 +1,6 @@
 # Use official n8n image as base (Alpine-based)
-FROM n8nio/n8n:latest
+# FROM n8nio/n8n:latest
+FROM n8nio/n8n:2.0.3
 
 # Switch to root to install packages
 USER root
@@ -36,4 +37,5 @@ USER node
 
 # Ensure n8n binary is in PATH
 ENV PATH=/usr/local/bin:$PATH
+
 
