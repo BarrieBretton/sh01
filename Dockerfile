@@ -6,6 +6,11 @@ FROM n8nio/n8n:2.20.0
 USER root
 
 # Install curl (Alpine package manager)
+# Restore apk: newer official n8n images intentionally omit it
+COPY --from=alpine:3.22 /sbin/apk /sbin/apk
+COPY --from=alpine:3.22 /lib/apk /lib/apk
+COPY --from=alpine:3.22 /usr/lib/libapk* /usr/lib/
+
 RUN apk add --no-cache curl bash
 
 # Set environment variables
@@ -39,5 +44,3 @@ USER node
 
 # Ensure n8n binary is in PATH
 ENV PATH=/usr/local/bin:$PATH
-
-
