@@ -7,11 +7,11 @@ USER root
 
 # Install curl (Alpine package manager)
 # Restore apk: newer official n8n images intentionally omit it
-COPY --from=alpine:3.21 /sbin/apk /sbin/apk
-COPY --from=alpine:3.21 /lib/apk /lib/apk
-COPY --from=alpine:3.21 /usr/lib/libapk* /usr/lib/
+COPY --from=alpine:3.22 /sbin/apk /sbin/apk
+COPY --from=alpine:3.22 /lib/apk /lib/apk
+COPY --from=alpine:3.22 /usr/lib/libapk* /usr/lib/
 
-RUN apk add --no-cache curl bash
+RUN apk add --no-cache --no-upgrade curl bash
 
 # Set environment variables
 ENV NODE_ENV=production
