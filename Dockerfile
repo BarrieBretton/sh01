@@ -1,17 +1,23 @@
 # Use official n8n image as base (Alpine-based)
 # FROM n8nio/n8n:latest
+
+# Build a compatible Bash binary separately
+FROM alpine:3.22 AS bash-source
+RUN apk add --no-cache bash
+
 FROM n8nio/n8n:2.20.0
 
 # Switch to root to install packages
 USER root
 
 # Install curl (Alpine package manager)
-# Restore apk: newer official n8n images intentionally omit it
-COPY --from=alpine:3.22 /sbin/apk /sbin/apk
-COPY --from=alpine:3.22 /lib/apk /lib/apk
-COPY --from=alpine:3.22 /usr/lib/libapk* /usr/lib/
-
-RUN apk add --no-cache --no-upgrade curl bash
+# apk is intentionally absent/locked in this n8n image.
+# Add Bash directly instead, with only its runtime libraries.
+COPY --from=bash-source /bin/bash /bin/bash
+COPY --from=bash-source /usr/lib/libreadline.so.8* /usr/lib/
+COPY --from=bash-source /usr/lib/libhistory.so.8* /usr/lib/
+COPY --from=bash-source /usr/lib/libncursesw.so.6* /usr/lib/
+RUN ln -sf /bin/bash /usr/bin/bash
 
 # Set environment variables
 ENV NODE_ENV=production
